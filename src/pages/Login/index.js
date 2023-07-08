@@ -1,6 +1,48 @@
-
-
+import React from 'react';
+import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
 function Login() {
+  const navigate = useNavigate();
+  const [username,setUsername] = React.useState('');
+  const [password,setPassword] = React.useState('');
+  
+  const doLogin = ()=>{
+
+    const header = {
+      'Content-Type': 'application/json',
+      'Accept-Encoding': 'gzip;q=1.0, compress;q=0.5',
+    };
+
+    const data = JSON.stringify({
+      username,
+      password
+    });
+
+    axios({
+      method: 'post',
+      url: 'http://localhost:9090/api/v1/user/login',
+      headers: header,
+      data: data
+    }).then(result=>{
+      console.log(result);
+      if(result.data.statusCode===200){
+        //alert(result.data.token);
+        /**
+         * Eğer kullanıcı doğru bilgiler ile giriş yapar ise, kişinin kimlik bilgilerini tutan token ı lokalde bir yere yaz.
+         * KEY/VALUE
+         */
+        localStorage.setItem('TOKEN', result.data.token);
+        /**
+         * giriş yapıp token bilgisini yazdıktan sonra ana sayfaya yönlendirme yapacağız.
+         */
+        navigate('/home');
+      }
+    }).catch(data=>{
+      const result = data.response.data;
+      alert(result.message);
+    })
+  }
+
     return(
         <>
     
@@ -116,19 +158,19 @@ function Login() {
                   <form name="Login_form" id='Login_form'>
                      <div class="row">
                       <div class="form-group col-xs-12">
-                        <label for="my-email" class="sr-only">Email</label>
-                        <input id="my-email" class="form-control input-group-lg" type="text" name="Email" title="Enter Email" placeholder="Your Email"/>
+                        <label for="my-email" class="sr-only">Username</label>
+                        <input id="my-email" onChange={event=>setUsername(event.target.value)} class="form-control input-group-lg" type="text" name="Email" title="Enter Username" placeholder="Username"/>
                       </div>
                     </div>
                     <div class="row">
                       <div class="form-group col-xs-12">
                         <label for="my-password" class="sr-only">Password</label>
-                        <input id="my-password" class="form-control input-group-lg" type="password" name="password" title="Enter password" placeholder="Password"/>
+                        <input id="my-password" onChange={event=>setPassword(event.target.value)} class="form-control input-group-lg" type="password" name="password" title="Enter password" placeholder="Password"/>
                       </div>
                     </div>
                   </form>
                   <p><a href="#">Forgot Password?</a></p>
-                  <button class="btn btn-primary">Login Now</button>
+                  <button onClick={doLogin} class="btn btn-primary">Login Now</button>
                 </div>
               </div>
             </div>
