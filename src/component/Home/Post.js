@@ -32,39 +32,39 @@ export default function Post(props) {
 
     return(
         
-        <div class="post-content">                
-            <img src={post.postimage} alt="post-image" class="img-responsive post-image" />
-            <div class="post-container">
-            <img src={post.userimg} alt="user" class="profile-photo-md pull-left" />
-            <div class="post-detail">
-                <div class="user-info">
-                <h5><a href="timeline.html" class="profile-link">{post.username}</a> <span class="following">{post.isfollow && 'following'}</span></h5>
-                <p class="text-muted">Published a photo about {post.sharedtime}</p>
+        <div className="post-content" key={props.key}>                
+            <img src={post.postimage} alt="post-image" className="img-responsive post-image" />
+            <div className="post-container">
+            <img src={post.userimg} alt="user" className="profile-photo-md pull-left" />
+            <div className="post-detail">
+                <div className="user-info">
+                <h5><a href="timeline.html" className="profile-link">{post.username}</a> <span className="following">{post.isfollow && 'following'}</span></h5>
+                <p className="text-muted">Published a photo about {post.sharedtime}</p>
                 </div>
-                <div class="reaction">
-                <a href="/post/like" class="btn text-green"><i class="icon ion-thumbsup"></i> {post.likecount}</a>
-                <a href="/post/dislike" class="btn text-red"><i class="fa fa-thumbs-down"></i> {post.dislikecount}</a>
+                <div className="reaction">
+                <a href="/post/like" className="btn text-green"><i className="icon ion-thumbsup"></i> {post.likecount}</a>
+                <a href="/post/dislike" className="btn text-red"><i className="fa fa-thumbs-down"></i> {post.dislikecount}</a>
                 </div>
-                <div class="line-divider"></div>
-                <div class="post-text">
-                <p>{post.usercomment}<i class="em em-anguished"></i> <i class="em em-anguished"></i> <i class="em em-anguished"></i></p>
+                <div className="line-divider"></div>
+                <div className="post-text">
+                <p>{post.usercomment}<i className="em em-anguished"></i> <i className="em em-anguished"></i> <i className="em em-anguished"></i></p>
                 </div>
-                <div class="line-divider"></div>
+                <div className="line-divider"></div>
 
                 {
-                    comments.map(data=>
-                         <div class="post-comment">
-                            <img src={data.img} alt="" class="profile-photo-sm" />
-                            <p><a href="timeline.html" class="profile-link">{data.username} </a><i class="em em-laughing"></i>{data.comment}</p>
+                    comments.map((data,index)=>
+                         <div className="post-comment" key={index}>
+                            <img src={data.img} alt="" className="profile-photo-sm" />
+                            <p><a href="timeline.html" className="profile-link">{data.username} </a><i className="em em-laughing"></i>{data.comment}</p>
                          </div>
             
                         )
                 }
 
                 
-                <div class="post-comment">
-                <img src={props.currentuserimage} alt="" class="profile-photo-sm" />
-                <input type="text" class="form-control" placeholder="Post a comment" />
+                <div className="post-comment">
+                <img src={props.currentuserimage} alt="" className="profile-photo-sm" />
+                <input type="text" className="form-control" placeholder="Post a comment" />
                 </div>
             </div>
             </div>

@@ -47,31 +47,31 @@ function Login() {
         <>
     
 		<header id="header-inverse">
-      <nav class="navbar navbar-default navbar-fixed-top menu">
-        <div class="container">
+      <nav className="navbar navbar-default navbar-fixed-top menu">
+        <div className="container">
 
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
+          <div className="navbar-header">
+            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span className="sr-only">Toggle navigation</span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index-register.html"><img src="images/logo.png" alt="logo" /></a>
+            <a className="navbar-brand" href="index-register.html"><img src="images/logo.png" alt="logo" /></a>
           </div>
 
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right main-menu">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Home <span><img src="images/down-arrow.png" alt="" /></span></a>
-                  <ul class="dropdown-menu newsfeed-home">
+          <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul className="nav navbar-nav navbar-right main-menu">
+              <li className="dropdown">
+                <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Home <span><img src="images/down-arrow.png" alt="" /></span></a>
+                  <ul className="dropdown-menu newsfeed-home">
                     <li><a href="index.html">Landing Page 1</a></li>
                     <li><a href="index-register.html">Landing Page 2</a></li>
                   </ul>
               </li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Newsfeed <span><img src="images/down-arrow.png" alt="" /></span></a>
-                  <ul class="dropdown-menu newsfeed-home">
+              <li className="dropdown">
+                <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Newsfeed <span><img src="images/down-arrow.png" alt="" /></span></a>
+                  <ul className="dropdown-menu newsfeed-home">
                     <li><a href="newsfeed.html">Newsfeed</a></li>
                     <li><a href="newsfeed-people-nearby.html">Poeple Nearly</a></li>
                     <li><a href="newsfeed-friends.html">My friends</a></li>
@@ -80,9 +80,9 @@ function Login() {
                     <li><a href="newsfeed-videos.html">Videos</a></li>
                   </ul>
               </li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Timeline <span><img src="images/down-arrow.png" alt="" /></span></a>
-                <ul class="dropdown-menu login">
+              <li className="dropdown">
+                <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Timeline <span><img src="images/down-arrow.png" alt="" /></span></a>
+                <ul className="dropdown-menu login">
                   <li><a href="timeline.html">Timeline</a></li>
                   <li><a href="timeline-about.html">Timeline About</a></li>
                   <li><a href="timeline-album.html">Timeline Album</a></li>
@@ -94,9 +94,9 @@ function Login() {
                   <li><a href="edit-profile-password.html">Change Password</a></li>
                 </ul>
               </li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle pages" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">All Pages <span><img src="images/down-arrow.png" alt="" /></span></a>
-                <ul class="dropdown-menu page-list">
+              <li className="dropdown">
+                <a href="#" className="dropdown-toggle pages" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">All Pages <span><img src="images/down-arrow.png" alt="" /></span></a>
+                <ul className="dropdown-menu page-list">
                   <li><a href="index.html">Landing Page 1</a></li>
                   <li><a href="index-register.html">Landing Page 2</a></li>
                   <li><a href="newsfeed.html">Newsfeed</a></li>
@@ -115,12 +115,12 @@ function Login() {
                   <li><a href="404.html">404 Not Found</a></li>
                 </ul>
               </li>
-              <li class="dropdown"><a href="contact.html">Contact</a></li>
+              <li className="dropdown"><a href="contact.html">Contact</a></li>
             </ul>
-            <form class="navbar-form navbar-right hidden-sm">
-              <div class="form-group">
-                <i class="icon ion-android-search"></i>
-                <input type="text" class="form-control" placeholder="Search friends, photos, videos" />
+            <form className="navbar-form navbar-right hidden-sm">
+              <div className="form-group">
+                <i className="icon ion-android-search"></i>
+                <input type="text" className="form-control" placeholder="Search friends, photos, videos" />
               </div>
             </form>
           </div>
@@ -129,62 +129,62 @@ function Login() {
     </header>
 
     <div id="lp-register">
-    	<div class="container wrapper">
-        <div class="row">
-        	<div class="col-sm-5">
-            <div class="intro-texts">
-            	<h1 class="text-white">Make Cool Friends !!!</h1>
+    	<div className="container wrapper">
+        <div className="row">
+        	<div className="col-sm-5">
+            <div className="intro-texts">
+            	<h1 className="text-white">Make Cool Friends !!!</h1>
             	<p>Friend Finder is a social network template that can be used to connect people. The template offers Landing pages, News Feed, Image/Video Feed, Chat Box, Timeline and lot more. <br /> <br />Why are you waiting for? Buy it now.</p>
-              <button class="btn btn-primary">Learn More</button>
+              <button className="btn btn-primary">Learn More</button>
             </div>
           </div>
-        	<div class="col-sm-6 col-sm-offset-1">
-            <div class="reg-form-container"> 
+        	<div className="col-sm-6 col-sm-offset-1">
+            <div className="reg-form-container"> 
             
-              <div class="reg-options">
-                <ul class="nav nav-tabs">
+              <div className="reg-options">
+                <ul className="nav nav-tabs">
                   <li ><a href="/register">Register</a></li>
-                  <li class="active"><a href="/login" >Login</a></li>
+                  <li className="active"><a href="/login" >Login</a></li>
                 </ul>
               </div>
           
-              <div class="tab-content">
+              <div className="tab-content">
                              
-                <div class="tab-pane active" id="login">
+                <div className="tab-pane active" id="login">
                   <h3>Login</h3>
-                  <p class="text-muted">Log into your account</p>
+                  <p className="text-muted">Log into your account</p>
                   
                  
                   <form name="Login_form" id='Login_form'>
-                     <div class="row">
-                      <div class="form-group col-xs-12">
-                        <label for="my-email" class="sr-only">Username</label>
-                        <input id="my-email" onChange={event=>setUsername(event.target.value)} class="form-control input-group-lg" type="text" name="Email" title="Enter Username" placeholder="Username"/>
+                     <div className="row">
+                      <div className="form-group col-xs-12">
+                        <label htmlFor="my-email" className="sr-only">Username</label>
+                        <input id="my-email" onChange={event=>setUsername(event.target.value)} className="form-control input-group-lg" type="text" name="Email" title="Enter Username" placeholder="Username"/>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="form-group col-xs-12">
-                        <label for="my-password" class="sr-only">Password</label>
-                        <input id="my-password" onChange={event=>setPassword(event.target.value)} class="form-control input-group-lg" type="password" name="password" title="Enter password" placeholder="Password"/>
+                    <div className="row">
+                      <div className="form-group col-xs-12">
+                        <label htmlFor="my-password" className="sr-only">Password</label>
+                        <input autoComplete='false' id="my-password" onChange={event=>setPassword(event.target.value)} className="form-control input-group-lg" type="password" name="password" title="Enter password" placeholder="Password"/>
                       </div>
                     </div>
                   </form>
                   <p><a href="#">Forgot Password?</a></p>
-                  <button onClick={doLogin} class="btn btn-primary">Login Now</button>
+                  <button onClick={doLogin} className="btn btn-primary">Login Now</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-sm-6 col-sm-offset-6">
+        <div className="row">
+          <div className="col-sm-6 col-sm-offset-6">
           
-            <ul class="list-inline social-icons">
-              <li><a href="#"><i class="icon ion-social-facebook"></i></a></li>
-              <li><a href="#"><i class="icon ion-social-twitter"></i></a></li>
-              <li><a href="#"><i class="icon ion-social-googleplus"></i></a></li>
-              <li><a href="#"><i class="icon ion-social-pinterest"></i></a></li>
-              <li><a href="#"><i class="icon ion-social-linkedin"></i></a></li>
+            <ul className="list-inline social-icons">
+              <li><a href="#"><i className="icon ion-social-facebook"></i></a></li>
+              <li><a href="#"><i className="icon ion-social-twitter"></i></a></li>
+              <li><a href="#"><i className="icon ion-social-googleplus"></i></a></li>
+              <li><a href="#"><i className="icon ion-social-pinterest"></i></a></li>
+              <li><a href="#"><i className="icon ion-social-linkedin"></i></a></li>
             </ul>
           </div>
         </div>

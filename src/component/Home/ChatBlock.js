@@ -22,14 +22,14 @@ export default function ChatBlock(props) {
     ];
     return(
         <div id="chat-block">
-            <div class="title">Chat online</div>
-            <ul class="online-users list-inline">
+            <div className="title">Chat online</div>
+            <ul className="online-users list-inline">
                 {
-                    userList.map(data=>
-                        <li>
+                    userList.map((data,index)=>
+                        <li key={index}>
                             <a href="newsfeed-messages.html" title={data.username}>
-                                <img src={data.image} alt="user" class="img-responsive profile-photo" />
-                                <span class="online-dot"></span>
+                                <img src={data.image} alt="user" className="img-responsive profile-photo" />
+                                <span className="online-dot"></span>
                             </a>
                         </li>
                     )

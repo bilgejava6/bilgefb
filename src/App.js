@@ -11,19 +11,27 @@ import React from 'react';
 
 function App() {
   const [islogin,setIslogin] = React.useState(false);
-  const token = localStorage.getItem('TOKEN');
-  if(token!==null)
-    setIslogin(true);
-  else
-    setIslogin(false);
+
+  const getIdLogin = async ()=>{
+    let token = await localStorage.getItem('TOKEN');
+        if(token!==null)
+          setIslogin(true);
+        else
+          setIslogin(false);
+  }
+
+  React.useEffect(()=>{   
+    getIdLogin();
+  },[]);
+ 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={islogin ? <Home /> : <Login /> }/>
-        <Route path='/home' element={<Home />}/>        
+        <Route path='/' element={<Login /> }/>
+        <Route path='/home' element={islogin ? <Home /> : <Login />}/>        
         <Route path='/login' element={<Login />}/>
         <Route path='/register' element={<Register />}/>
-        <Route path='/profile' element={<Profile />}/>        
+        <Route path='/profile' element={islogin ? <Profile /> : <Login />}/>        
       </Routes>
     </BrowserRouter>
   );

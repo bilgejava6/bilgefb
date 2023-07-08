@@ -26,12 +26,12 @@ export default function NewUsers(props) {
     ]
 
     return(
-        <div class="suggestions" id="sticky-sidebar">
-                <h4 class="grey">Who to Follow</h4>
+        <div className="suggestions" id="sticky-sidebar">
+                <h4 className="grey">Who to Follow</h4>
                 {
-                    newUserList.map(data=>                        
-                            <div class="follow-user">
-                                <img src={data.img} alt="" class="profile-photo-sm pull-left" />
+                    newUserList.map((data,index)=>                        
+                            <div className="follow-user" key={index}>
+                                <img src={data.img} alt="" className="profile-photo-sm pull-left" />
                                 <div>
                                     <h5><a href="timeline.html">{data.username}</a></h5>
                                     <a href="/add" className="text-green">Add friend</a>
