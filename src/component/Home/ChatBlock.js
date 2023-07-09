@@ -25,7 +25,7 @@ export default function ChatBlock(props) {
    
     React.useEffect(()=>{
         setInterval(()=>{
-            getOnlineList();
+            //getOnlineList();
         },500);        
     },[]);
 

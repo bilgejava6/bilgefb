@@ -10,6 +10,7 @@ function Home() {
   const [newUsers,setNewUsers] = React.useState([]);
   
   const [postList,setPostList] = React.useState([]);
+  const [postImage,setPostImage] = React.useState(null);
   
   const getProfile= ()=>{
       let token =  localStorage.getItem('TOKEN'); 
@@ -32,6 +33,38 @@ function Home() {
           })
   };
 
+  const openFile = ()=>{
+      document.getElementById('file').click();
+  }
+
+
+  const publishPost = ()=>{
+    /**
+     * inputFile içinde seçinlen resim bulunur.
+     */
+    let formData = new FormData();
+    formData.append('imageFile', postImage);
+    console.log(formData);
+    fetch('http://localhost:9090/api/v1/post/uploadImage',{
+      method: 'post',
+      headers:{       
+        'Content-Type': 'multipart/form-data'
+      },
+      body: formData
+    }).then(res=>res.json())
+    .then(res=>{
+      console.log(res);
+    })
+  }
+
+  const handleFileChange = event => {
+    const fileObj = event.target.files && event.target.files[0];
+    if (!fileObj) {
+      return;
+    }
+   setPostImage(fileObj);
+  };
+
   const getNewUsers = ()=>{
     fetch('http://localhost:9090/api/v1/user/newUserList',{
       method: 'post',
@@ -47,9 +80,25 @@ function Home() {
     })
   }
   
+  const getPostList = ()=>{
+    fetch('http://localhost:9090/api/v1/post/getPosts',{
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        token: localStorage.getItem('TOKEN')
+      })
+    }).then(res=> res.json())
+    .then(result=>{
+      setPostList(result.data)
+    })
+  }
+  
   React.useEffect(()=>{
     getProfile();
     getNewUsers();
+    getPostList();
   },[]);
 
     const posts = [
@@ -212,34 +261,49 @@ function Home() {
             
             <div className="col-md-7">
 
-            <div className="create-post">
-                  <div className="row">
-                    <div className="col-md-8 col-sm-7">
-                      <div className="form-group">
-                        <img src="images/users/user-1.jpg" alt="" className="profile-photo-md" />
-                       
-                        <textarea name="content" id="exampleTextarea" cols="50" rows="1" className="form-control" placeholder="Write what you wish">
+              <div className="create-post">
+                <form action='http://localhost:9090/api/v1/post/uploadImage' method='post' encType='multipart/form-data'>
+                    <div className="row">
+                      <div className="col-md-8 col-sm-7">
+                        <div className="form-group">
+                          <img src={profile?.profileUrl} alt="" className="profile-photo-md" />
+                        
+                          <textarea name="comment" id="exampleTextarea" cols="50" rows="4" className="form-control" placeholder="Write what you wish">
 
-                        </textarea>
-                        <div className='hide' hidden>
-                           <input type="file" name="file" id="file" />
+                          </textarea>
+                          <div className='hide' hidden>
+                            <input type="file" name="file" id="file" onChange={handleFileChange} />
+                            <input type='text' value={profile?.userid} name='userid'/>
+                            <input type='text' value={localStorage.getItem('TOKEN')} name='token'/>
+                            
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="col-md-4 col-sm-5">
-                      <div className="tools">
-                        <ul className="publishing-tools list-inline" style={{marginRight:5}}>                         
-                          <li><a href="#"><i className="ion-images"></i></a></li>                    
-                        </ul>
-                        <button className="btn btn-primary pull-right" type="submit" >Publish</button>
+                      <div className="col-md-4 col-sm-5">
+                        <div className="tools">
+                          <ul className="publishing-tools list-inline" style={{marginRight:5}}>                         
+                            <li><a href="#" onClick={openFile}><i className="ion-images"></i></a></li>                    
+                            <li>
+                               {
+                                postImage && <img id='imagePost' src={URL.createObjectURL(postImage)} style={{width: 110, height: 80 }} alt=''></img>
+                               }
+                                
+                            </li>
+                          </ul>
+                          
+                        </div>
+                       
+                      </div>
+                      <div className='col-md-12'>
+                          <button className="btn btn-primary pull-right" type='submit'>Publish</button>
                       </div>
                     </div>
-
-                  </div>
+                </form>
+                   
               </div>
 
               {
-                posts.map((data,index)=>
+                postList.map((data,index)=>
                      <Post post={data} key={index}/>
                   )
               }

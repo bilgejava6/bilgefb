@@ -35,7 +35,7 @@ export default function Post(props) {
         <div className="post-content" key={props.key}>                
             <img src={post.postimage} alt="post-image" className="img-responsive post-image" />
             <div className="post-container">
-            <img src={post.userimg} alt="user" className="profile-photo-md pull-left" />
+            <img src={post.userprofileimage === null ? '/images/users/user-2.jpg' : post.userprofileimage} alt="user" className="profile-photo-md pull-left" />
             <div className="post-detail">
                 <div className="user-info">
                 <h5><a href="timeline.html" className="profile-link">{post.username}</a> <span className="following">{post.isfollow && 'following'}</span></h5>
@@ -47,7 +47,7 @@ export default function Post(props) {
                 </div>
                 <div className="line-divider"></div>
                 <div className="post-text">
-                <p>{post.usercomment}<i className="em em-anguished"></i> <i className="em em-anguished"></i> <i className="em em-anguished"></i></p>
+                <p>{post.comment}<i className="em em-anguished"></i> <i className="em em-anguished"></i> <i className="em em-anguished"></i></p>
                 </div>
                 <div className="line-divider"></div>
 
