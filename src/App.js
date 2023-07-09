@@ -19,9 +19,33 @@ function App() {
         else
           setIslogin(false);
   }
+  const logout = ()=>{
+    fetch('http://localhost:9090/api/v1/user/logout',{
+    headers:{
+            'Content-Type': 'application/json'
+    },
+    method: 'post',
+    body: JSON.stringify({
+            token: localStorage.getItem('TOKEN')
+    })
 
+    }).then(res=>res.json())
+    .then(res=>{               
+    })
+}
   React.useEffect(()=>{   
     getIdLogin();
+   // window.addEventListener('beforeunload', alertUser)
+   window.addEventListener("beforeunload", (ev) => 
+  {  
+      ev.preventDefault();
+      return ev.returnValue = 'Are you sure you want to close?';
+  });
+    window.addEventListener('unload', logout);
+    return () => {
+      //  window.removeEventListener('beforeunload', alertUser)
+        window.removeEventListener('unload', logout);
+    }
   },[]);
  
   return (

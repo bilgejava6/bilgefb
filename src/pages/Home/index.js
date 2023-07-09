@@ -8,28 +8,48 @@ function Home() {
 
   const [profile,setProfile] = React.useState(null);
   const [newUsers,setNewUsers] = React.useState([]);
-  const [online,setOnline] = React.useState([]);
+  
   const [postList,setPostList] = React.useState([]);
-    
-  React.useEffect(()=>{
-    let token =  localStorage.getItem('TOKEN'); 
-   
-    fetch('http://localhost:9090/api/v1/user/getProfileByToken',{
-      method: 'post',      
-      headers:{       
-        'Content-Type': 'application/json',
-        'Accept-Encoding': 'gzip;q=1.0, compress;q=0.5'
+  
+  const getProfile= ()=>{
+      let token =  localStorage.getItem('TOKEN'); 
+        
+          fetch('http://localhost:9090/api/v1/user/getProfileByToken',{
+            method: 'post',      
+            headers:{       
+              'Content-Type': 'application/json',
+              'Accept-Encoding': 'gzip;q=1.0, compress;q=0.5'
+            },
+            body: JSON.stringify({
+              token
+            })
+          }).then(data=>data.json())
+          .then(data=>{
+            console.log(data);
+            setProfile(data.data);
+          }).catch(hata=>{
+            alert(hata.message);
+          })
+  };
+
+  const getNewUsers = ()=>{
+    fetch('http://localhost:9090/api/v1/user/newUserList',{
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        token
+        token: localStorage.getItem('TOKEN')
       })
-    }).then(data=>data.json())
-    .then(data=>{
-      console.log(data);
-      setProfile(data.data);
-    }).catch(hata=>{
-      alert(hata.message);
+    }).then(res=> res.json())
+    .then(result=>{
+      setNewUsers(result.data)
     })
+  }
+  
+  React.useEffect(()=>{
+    getProfile();
+    getNewUsers();
   },[]);
 
     const posts = [
@@ -189,6 +209,7 @@ function Home() {
               </ul>
              <ChatBlock />
             </div>
+            
             <div className="col-md-7">
 
             <div className="create-post">
@@ -229,7 +250,7 @@ function Home() {
 
 
             <div className="col-md-2 static">
-              <NewUsers />
+              <NewUsers newUserList={newUsers}/>
             </div>
           </div>
         </div>
