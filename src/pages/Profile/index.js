@@ -2,6 +2,7 @@ import React from 'react';
 
 function Profile() {
     const [profile,setProfile] = React.useState({
+        id: '',
         name: '',
         surname: '',
         email: '',
@@ -15,6 +16,27 @@ function Profile() {
        
     });
    
+
+    const uploadProfileImage= (fileObj)=>{
+
+      let formData = new FormData();
+      formData.append('file', fileObj);
+      formData.append('userid',profile.id);
+      fetch('http://localhost:9090/api/v1/user/uploadfile',{
+        method: 'post',
+        body: formData
+      });
+    };
+
+  const [profileImage,setProfileImage] = React.useState(null);
+  const handleFileChange = event => {
+    const fileObj = event.target.files && event.target.files[0];
+    if (!fileObj) {
+      return;
+    }
+    setProfileImage(fileObj);
+    uploadProfileImage(fileObj);
+  };
 
     React.useEffect(()=>{
         fetch('http://localhost:9090/api/v1/user/getProfile',{
@@ -32,7 +54,9 @@ function Profile() {
             alert(hata.message);
         })
     },[]);
-
+    const openFile = ()=>{
+      document.getElementById('file').click();
+  }
     const updateProfile = ()=>{
         fetch('http://localhost:9090/api/v1/user/saveProfile',{
             method: 'post',
@@ -179,7 +203,14 @@ function Profile() {
             <div class="row">
               <div class="col-md-3">
                 <div class="profile-info">
-                  <img src="images/users/user-1.jpg" alt="" class="img-responsive profile-photo" />
+                    <div className='hide' hidden>
+                        <input type="file" name="file" id="file" onChange={handleFileChange} />                          
+                     </div>
+                  
+                  {
+                                profileImage ? <img id='imagePost' src={URL.createObjectURL(profileImage)} class="img-responsive profile-photo" onClick={openFile}  alt=''></img>
+                                : <img src="images/users/user-1.jpg" alt="" class="img-responsive profile-photo" onClick={openFile} />
+                  }
                   <h3>Sarah Cruiz</h3>
                   <p class="text-muted">Creative Director</p>
                 </div>

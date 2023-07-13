@@ -3,15 +3,15 @@ import ChatBlock from '../../component/Home/ChatBlock';
 import NewUsers from '../../component/Home/NewUsers';
 import Post from '../../component/Home/Post';
 import React from 'react';
-
+import { Hypnosis } from "react-cssfx-loading";
 function Home() {
 
   const [profile,setProfile] = React.useState(null);
   const [newUsers,setNewUsers] = React.useState([]);
-  
+  const [comment,setComment] = React.useState('');
   const [postList,setPostList] = React.useState([]);
   const [postImage,setPostImage] = React.useState(null);
-  
+  const [loading,setLoding] = React.useState(false);
   const getProfile= ()=>{
       let token =  localStorage.getItem('TOKEN'); 
         
@@ -42,18 +42,33 @@ function Home() {
     /**
      * inputFile içinde seçinlen resim bulunur.
      */
+    setLoding(true);
     let formData = new FormData();
-    formData.append('imageFile', postImage);
-    console.log(formData);
-    fetch('http://localhost:9090/api/v1/post/uploadImage',{
+    formData.append('file', postImage);
+    
+    fetch('http://localhost:9090/api/v1/post/uploadfile',{
       method: 'post',
-      headers:{       
-        'Content-Type': 'multipart/form-data'
-      },
       body: formData
     }).then(res=>res.json())
     .then(res=>{
-      console.log(res);
+      let postimageUrl = res.url;
+   
+      fetch('http://localhost:9090/api/v1/post/createPost',{
+        method: 'post',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          token: localStorage.getItem('TOKEN'),
+          imageurl: postimageUrl,
+          userid: profile.userid,
+          comment: comment
+        })
+      }).then(resp=>resp.json())
+      .then(resp=>{
+        getPostList();
+        setLoding(false);
+      })
     })
   }
 
@@ -84,7 +99,9 @@ function Home() {
     fetch('http://localhost:9090/api/v1/post/getPosts',{
       method: 'post',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+  localStorage.getItem('TOKEN')
+
       },
       body: JSON.stringify({
         token: localStorage.getItem('TOKEN')
@@ -262,19 +279,18 @@ function Home() {
             <div className="col-md-7">
 
               <div className="create-post">
-                <form action='http://localhost:9090/api/v1/post/uploadImage' method='post' encType='multipart/form-data'>
-                    <div className="row">
+                    {
+                      loading ?      <Hypnosis color="#FF0000" width="150px" height="150px" duration="3s" />
+                      :   <div className="row">
                       <div className="col-md-8 col-sm-7">
                         <div className="form-group">
                           <img src={profile?.profileUrl} alt="" className="profile-photo-md" />
                         
-                          <textarea name="comment" id="exampleTextarea" cols="50" rows="4" className="form-control" placeholder="Write what you wish">
+                          <textarea name="comment" onChange={evt=>setComment(evt.target.value)} id="exampleTextarea" cols="50" rows="4" className="form-control" placeholder="Write what you wish">
 
                           </textarea>
                           <div className='hide' hidden>
-                            <input type="file" name="file" id="file" onChange={handleFileChange} />
-                            <input type='text' value={profile?.userid} name='userid'/>
-                            <input type='text' value={localStorage.getItem('TOKEN')} name='token'/>
+                            <input type="file" name="file" id="file" onChange={handleFileChange} />                          
                             
                           </div>
                         </div>
@@ -295,16 +311,24 @@ function Home() {
                        
                       </div>
                       <div className='col-md-12'>
-                          <button className="btn btn-primary pull-right" type='submit'>Publish</button>
+                          <button className="btn btn-primary pull-right" onClick={publishPost}>Publish</button>
                       </div>
                     </div>
-                </form>
-                   
+
+                    }
+                  
+              
+                   {
+                    /**
+                     *  <form action='http://localhost:9090/api/v1/post/uploadImage' method='post' encType='multipart/form-data'>
+                     *   </form>
+                     */
+                   }
               </div>
 
               {
                 postList.map((data,index)=>
-                     <Post post={data} key={index}/>
+                     <Post post={data} key={index} profile={profile}/>
                   )
               }
             

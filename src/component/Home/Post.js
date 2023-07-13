@@ -1,34 +1,56 @@
+import React from "react";
 
 export default function Post(props) {
     /**
      * props bir tag olarak kullanılan funtion ın içine geçilen properties olarak nitelendirilir.
      * ancak çok fazla özelliğiniz ve dataniz var ise bütün bilgileri props a geçmek zahmetli ve anlamsızdır.
      */
-    const {post} = props;
+    const {post,profile} = props;
+    let textComment = React.useRef();
+    const [comment,setComment] = React.useState('');
+    const [commentList,setCommentList] = React.useState([]);
 
-    const comments = [
-        {
-            username: 'Muhammet',
-            img: 'images/users/user-4.jpg',
-            comment: 'yorum yoooooooooooooooooooooooooooooooooooo rum'
-        },
-        {
-            username: 'Muhammet',
-            img: 'images/users/user-14.jpg',
-            comment: 'yorum yoooooooooooooooooooooooooooooooooooo rum'
-        },
-        {
-            username: 'Muhammet',
-            img: 'images/users/user-2.jpg',
-            comment: 'yorum yoooooooooooooooooooooooooooooooooooo rum'
-        },
-        {
-            username: 'Muhammet',
-            img: 'images/users/user-9.jpg',
-            comment: 'yorum yoooooooooooooooooooooooooooooooooooo rum'
-        },
-        
-    ]
+    const getCommentList= ()=>{
+        fetch('http://localhost:9090/api/v1/comment/getallcommentbypostid',{
+            method:'post',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                    token:  localStorage.getItem('TOKEN'),
+                    postid: post.id
+            })
+        }).then(res=> res.json())
+        .then(res=>setCommentList(res));
+    };
+
+    const createComment= (event)=>{
+        let token =  localStorage.getItem('TOKEN'); 
+        console.log(token);
+        if(event.key==='Enter'){
+             fetch('http://localhost:9090/api/v1/comment/createcomment',{
+            method: 'post',
+            headers:{
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                    token:  token,
+                    postid: parseInt(post.id),
+                    userid: parseInt(profile.userid),
+                    comment: comment
+            })
+        }).then(res=> res.json())
+        .then(res=>{
+            textComment.current.value = '';
+            getCommentList()
+        });
+        }
+       
+    };
+
+    React.useEffect(()=>{
+        getCommentList();
+    },[]);
 
     return(
         
@@ -52,10 +74,10 @@ export default function Post(props) {
                 <div className="line-divider"></div>
 
                 {
-                    comments.map((data,index)=>
+                    commentList?.map((data,index)=>
                          <div className="post-comment" key={index}>
-                            <img src={data.img} alt="" className="profile-photo-sm" />
-                            <p><a href="timeline.html" className="profile-link">{data.username} </a><i className="em em-laughing"></i>{data.comment}</p>
+                            <img src={data?.profileurl} alt="" className="profile-photo-sm" />
+                            <p><a href="timeline.html" className="profile-link">{data?.username} </a><i className="em em-laughing"></i>{data?.comment}</p>
                          </div>
             
                         )
@@ -63,8 +85,9 @@ export default function Post(props) {
 
                 
                 <div className="post-comment">
-                <img src={props.currentuserimage} alt="" className="profile-photo-sm" />
-                <input type="text" className="form-control" placeholder="Post a comment" />
+                <img src={profile?.profileUrl} alt="" className="profile-photo-sm" />
+                <input type="text" className="form-control" onKeyDown={createComment} onChange={event=>setComment(event.target.value)} 
+                    placeholder="Post a comment" ref={textComment}/>
                 </div>
             </div>
             </div>
