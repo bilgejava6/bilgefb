@@ -108,12 +108,12 @@ const authSlice = createSlice({
             state.isLoadingLogin=true;
         });
         build.addCase(fetchDoLogin.fulfilled,(state,action)=>{
-            console.log('fulfill oldu.....: ',action.payload);
+           
             state.isLoadingLogin = false;
-            if(action.payload.code===200){
-                   state.isAuthenticated = true;
+            if(action.payload.statusCode===200){
+                state.isAuthenticated = true;
                 state.token = action.payload.token;
-                localStorage.setItem('TOKEN', action.payload.token);
+               // localStorage.setItem('TOKEN', action.payload.token);
             }else{
                 alert(action.payload.message);
             }

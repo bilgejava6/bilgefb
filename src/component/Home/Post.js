@@ -1,60 +1,42 @@
 import React from "react";
-
+import {useDispatch, useSelector} from 'react-redux';
+import { fetchCreateComment, fetchGetCommentList } from "../../store/features/commentSlice";
 export default function Post(props) {
     /**
      * props bir tag olarak kullanılan funtion ın içine geçilen properties olarak nitelendirilir.
      * ancak çok fazla özelliğiniz ve dataniz var ise bütün bilgileri props a geçmek zahmetli ve anlamsızdır.
      */
+    const dispatch = useDispatch();
     const {post,profile} = props;
     let textComment = React.useRef();
     const [comment,setComment] = React.useState('');
     const [commentList,setCommentList] = React.useState([]);
 
+    const token = useSelector((state)=> state.auth.token);
+    
     const getCommentList= ()=>{
-        fetch('http://localhost:9090/api/v1/comment/getallcommentbypostid',{
-            method:'post',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                    token:  localStorage.getItem('TOKEN'),
-                    postid: post.id
-            })
-        }).then(res=> res.json())
-        .then(res=>setCommentList(res));
+        dispatch(fetchGetCommentList({token, postid: parseInt(post.id)})).then(data=>setCommentList(data.payload))
     };
-
-    const createComment= (event)=>{
-        let token =  localStorage.getItem('TOKEN'); 
-        console.log(token);
-        if(event.key==='Enter'){
-             fetch('http://localhost:9090/api/v1/comment/createcomment',{
-            method: 'post',
-            headers:{
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                    token:  token,
-                    postid: parseInt(post.id),
-                    userid: parseInt(profile.userid),
-                    comment: comment
-            })
-        }).then(res=> res.json())
-        .then(res=>{
-            textComment.current.value = '';
-            getCommentList()
-        });
-        }
-       
+    const createComment = (event)=>{
+        if(event.key==='Enter')
+            dispatch(fetchCreateComment({
+                token: token,
+                postid: parseInt(post.id),
+                userid: parseInt(profile.userid),
+                comment: comment
+            })).then(()=>{
+                textComment.current.value = '';
+                getCommentList()
+            });    
     };
 
     React.useEffect(()=>{
         getCommentList();
     },[]);
-
+    console.log(commentList);
     return(
         
-        <div className="post-content" key={props.key}>                
+        <div className="post-content" key={post.id}>                
             <img src={post.postimage} alt="post-image" className="img-responsive post-image" />
             <div className="post-container">
             <img src={post.userprofileimage === null ? '/images/users/user-2.jpg' : post.userprofileimage} alt="user" className="profile-photo-md pull-left" />
@@ -69,7 +51,7 @@ export default function Post(props) {
                 </div>
                 <div className="line-divider"></div>
                 <div className="post-text">
-                <p>{post.comment}<i className="em em-anguished"></i> <i className="em em-anguished"></i> <i className="em em-anguished"></i></p>
+                <p>{post.comment}</p>
                 </div>
                 <div className="line-divider"></div>
 
@@ -77,7 +59,7 @@ export default function Post(props) {
                     commentList?.map((data,index)=>
                          <div className="post-comment" key={index}>
                             <img src={data?.profileurl} alt="" className="profile-photo-sm" />
-                            <p><a href="timeline.html" className="profile-link">{data?.username} </a><i className="em em-laughing"></i>{data?.comment}</p>
+                            <p><a href="timeline.html" className="profile-link">{data?.username} </a>{data?.comment}</p>
                          </div>
             
                         )

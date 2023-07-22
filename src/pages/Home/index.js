@@ -4,35 +4,30 @@ import NewUsers from '../../component/Home/NewUsers';
 import Post from '../../component/Home/Post';
 import React from 'react';
 import { Hypnosis } from "react-cssfx-loading";
+import {useSelector, useDispatch} from 'react-redux';
+import { fetchGetNewUsers, fetchGetProfile } from '../../store/features/userSlice';
+import { fetchGetPostList } from '../../store/features/postSlice';
 function Home() {
+  const dispatch = useDispatch();
+  /**
+   * Slice lar içindeki initialState içinde tanımlanan statelere erişim sağlayaerak
+   * dğeişkenlerimizi tanımlıyoruz.
+   */
+  const token = useSelector((state)=> state.auth.token);
+  const profile = useSelector((state)=> state.user.profile);
+  const newUsers = useSelector((state)=>state.user.newusers);
+  const postList = useSelector((state)=> state.post.postlist);
 
-  const [profile,setProfile] = React.useState(null);
-  const [newUsers,setNewUsers] = React.useState([]);
+
   const [comment,setComment] = React.useState('');
-  const [postList,setPostList] = React.useState([]);
   const [postImage,setPostImage] = React.useState(null);
   const [loading,setLoding] = React.useState(false);
-  const getProfile= ()=>{
-      let token =  localStorage.getItem('TOKEN'); 
-        
-          fetch('http://localhost:9090/api/v1/user/getProfileByToken',{
-            method: 'post',      
-            headers:{       
-              'Content-Type': 'application/json',
-              'Accept-Encoding': 'gzip;q=1.0, compress;q=0.5'
-            },
-            body: JSON.stringify({
-              token
-            })
-          }).then(data=>data.json())
-          .then(data=>{
-            console.log(data);
-            setProfile(data.data);
-          }).catch(hata=>{
-            alert(hata.message);
-          })
-  };
-
+  
+  const getProfile= ()=>{dispatch(fetchGetProfile({token}));};
+  const getNewUsers = ()=>{dispatch(fetchGetNewUsers({token}));}
+  const getPostList = ()=>{dispatch(fetchGetPostList({token}))}
+  
+  
   const openFile = ()=>{
       document.getElementById('file').click();
   }
@@ -59,7 +54,7 @@ function Home() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          token: localStorage.getItem('TOKEN'),
+          token: token,
           imageurl: postimageUrl,
           userid: profile.userid,
           comment: comment
@@ -80,37 +75,8 @@ function Home() {
    setPostImage(fileObj);
   };
 
-  const getNewUsers = ()=>{
-    fetch('http://localhost:9090/api/v1/user/newUserList',{
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        token: localStorage.getItem('TOKEN')
-      })
-    }).then(res=> res.json())
-    .then(result=>{
-      setNewUsers(result.data)
-    })
-  }
   
-  const getPostList = ()=>{
-    fetch('http://localhost:9090/api/v1/post/getPosts',{
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer '+  localStorage.getItem('TOKEN')
-
-      },
-      body: JSON.stringify({
-        token: localStorage.getItem('TOKEN')
-      })
-    }).then(res=> res.json())
-    .then(result=>{
-      setPostList(result.data)
-    })
-  }
+  
   
   React.useEffect(()=>{
     getProfile();
@@ -118,59 +84,14 @@ function Home() {
     getPostList();
   },[]);
 
-    const posts = [
-      {
-        postimage: '/images/post-images/1.jpg',
-        userimg: '/images/users/user-1.jpg',
-        username: 'Ahmet',
-        sharedtime: '2 gün önce',
-        isfollow: true,
-        likecount: 1223,
-        dislikecount: 3,
-        usercomment: 'Bugün hava çoooooooooooooooook sıcak'
-      },
-      {
-        postimage: '/images/post-images/2.jpg',
-        userimg: '/images/users/user-2.jpg',
-        username: 'Deniz',
-        sharedtime: '2 gün önce',
-        isfollow: true,
-        likecount: 1223,
-        dislikecount: 3,
-        usercomment: 'Bugün hava çoooooooooooooooook sıcak'
-      },
-      {
-        postimage: '/images/post-images/3.jpg',
-        userimg: '/images/users/user-3.jpg',
-        username: 'Bahar',
-        sharedtime: '2 gün önce',
-        isfollow: true,
-        likecount: 1223,
-        dislikecount: 3,
-        usercomment: 'Bugün hava çoooooooooooooooook sıcak'
-      },
-      {
-        postimage: '/images/post-images/4.jpg',
-        userimg: '/images/users/user-4.jpg',
-        username: 'Fatma',
-        sharedtime: '2 gün önce',
-        isfollow: true,
-        likecount: 1223,
-        dislikecount: 3,
-        usercomment: 'Bugün hava çoooooooooooooooook sıcak'
-      }
 
-
-
-
-    ]
     /**
      * Kullanıcı profil bilgiledri
      * Post Listesi
      * Online Kişiler
      * En son kayıt olan kişiler
      */
-    console.log("Ana sayfa render oldu.");
+
     return(
         <>
 	    <header id="header">
@@ -327,8 +248,11 @@ function Home() {
               </div>
 
               {
-                postList.map((data,index)=>
-                     <Post post={data} key={index} profile={profile}/>
+                postList?.map((data, index)=>
+                     <div key={index}>
+                      <Post post={data}  profile={profile}/>
+                     </div>
+                     
                   )
               }
             

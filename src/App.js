@@ -8,17 +8,11 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
 import React from 'react';
-
+import {useSelector} from 'react-redux';
 function App() {
-  const [islogin,setIslogin] = React.useState(false);
+ 
+  const isAuth = useSelector((state)=> state.auth.isAuthenticated);
 
-  const getIdLogin = async ()=>{
-    let token = await localStorage.getItem('TOKEN');
-        if(token!==null)
-          setIslogin(true);
-        else
-          setIslogin(false);
-  }
   const logout = ()=>{
     fetch('http://localhost:9090/api/v1/user/logout',{
     headers:{
@@ -34,7 +28,7 @@ function App() {
     })
 }
   React.useEffect(()=>{   
-    getIdLogin();
+    
    // window.addEventListener('beforeunload', alertUser)
    window.addEventListener("beforeunload", (ev) => 
   {  
@@ -47,15 +41,15 @@ function App() {
         window.removeEventListener('unload', logout);
     }
   },[]);
- 
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Login /> }/>
-        <Route path='/home' element={islogin ? <Home /> : <Login />}/>        
+        <Route path='/' element={isAuth ? <Home /> : <Login />}/>
+        <Route path='/home' element={isAuth ? <Home /> : <Login />}/>        
         <Route path='/login' element={<Login />}/>
         <Route path='/register' element={<Register />}/>
-        <Route path='/profile' element={islogin ? <Profile /> : <Login />}/>        
+        <Route path='/profile' element={isAuth ? <Profile /> : <Login />}/>        
       </Routes>
     </BrowserRouter>
   );
