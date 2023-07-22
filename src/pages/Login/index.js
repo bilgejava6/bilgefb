@@ -1,8 +1,11 @@
 import React from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
+import {fetchDoLogin} from '../../store/features/authSlice';
 function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [username,setUsername] = React.useState('');
   const [password,setPassword] = React.useState('');
   
@@ -43,6 +46,9 @@ function Login() {
     })
   }
 
+  const doLoginSlice = ()=>{
+    dispatch(fetchDoLogin({username,password}));
+  }
     return(
         <>
     
@@ -170,7 +176,7 @@ function Login() {
                     </div>
                   </form>
                   <p><a href="#">Forgot Password?</a></p>
-                  <button onClick={doLogin} className="btn btn-primary">Login Now</button>
+                  <button onClick={doLoginSlice} className="btn btn-primary">Login Now</button>
                 </div>
               </div>
             </div>
